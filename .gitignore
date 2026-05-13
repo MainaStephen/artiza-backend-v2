@@ -1,0 +1,10 @@
+.env
+/.env
+
+# Secrets
+firebase.json
+*.json
+
+# Environment
+.env
+.env.*

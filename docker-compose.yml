@@ -1,0 +1,32 @@
+# version: "3.9"
+
+services:
+  web:
+    container_name: artiza_web
+    build:
+      context: ./artiza            # points to the folder with Dockerfile
+    entrypoint: /app/entrypoint.sh
+    volumes:
+      - ./artiza:/app              # project code
+      - ./artiza/media:/app/media  # persist media uploads inside artiza
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    restart: always
+
+  db:
+    container_name: artiza_db
+    image: postgres:15
+    volumes:
+      - artiza_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgresuser
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: artiza_db
+    restart: always
+
+volumes:
+  artiza_postgres_data: {}
