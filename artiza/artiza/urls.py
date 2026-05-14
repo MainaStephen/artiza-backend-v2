@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/cart/', include('cart.urls')),
     path('api/checkout/', include('checkout.urls')),
     path('api/artisan-matches/', include('artisanmatching.urls')),
+    path('api/artisan-applications/', include('artisanapplication.urls')),
 ]
 
 if settings.DEBUG:

@@ -128,7 +128,7 @@ from .models import User, ArtisanProfile
 # In your serializers.py
 
 class ArtisanCreateSerializer(serializers.ModelSerializer):
-    tier = serializers.ChoiceField(choices=['bronze', 'silver', 'gold', 'premium'], default='bronze', write_only=True)
+    tier = serializers.ChoiceField(choices=['bronze', 'silver', 'gold'], default='bronze', write_only=True)
     
     class Meta:
         model = User

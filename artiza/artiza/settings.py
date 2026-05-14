@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'cart',
     'checkout',
     'artisanmatching',
+    'artisanapplication',
      
     # "notifications.apps.NotificationsConfig",
 ]

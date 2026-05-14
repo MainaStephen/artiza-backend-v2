@@ -18,7 +18,7 @@
 #     "bronze": 1,
 #     "silver": 2,
 #     "gold": 3,
-#     "premium": 4,
+#     
 # }
 
 
@@ -42,7 +42,7 @@
 #         allowed_tiers = ["silver", "gold"]
 
 #     else:
-#         allowed_tiers = ["gold", "premium"]
+#         allowed_tiers = ["gold"]
 
 #     # =========================================
 #     # Get Eligible Artisans
@@ -106,7 +106,6 @@ TIER_WEIGHTS = {
     "bronze": 1,
     "silver": 2,
     "gold": 3,
-    "premium": 4,
 }
 
 
@@ -129,9 +128,9 @@ def match_artisans_to_project(project):
     elif budget <= 50000:
         allowed_tiers = ["silver", "gold"]
     else:
-        allowed_tiers = ["gold", "premium"]
+        allowed_tiers = ["gold"]
 
-    print(f"Allowed tiers: {allowed_tiers}")
+    # print(f"Allowed tiers: {allowed_tiers}")
 
     # =========================================
     # Get Eligible Artisans

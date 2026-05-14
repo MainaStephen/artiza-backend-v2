@@ -173,7 +173,7 @@ class ListClientProjectsView(generics.ListAPIView):
         negotiation_qs = Negotiation.objects.filter(
             proposal__project=OuterRef("pk"),
             final_agreed_amount__isnull=False,
-            is_closed=True  
+            
         ).values("final_agreed_amount")[:1]
 
         # Subquery 2: Fetch proposed price from selected proposal (when no negotiation)
@@ -210,7 +210,7 @@ class ListClientProjectsView(generics.ListAPIView):
                     default=Value(None),
                     output_field=models.DecimalField()
                 ),
-                unread_negotiation_messages=unread_negotiation_messages  # Add this line
+                unread_negotiation_messages=unread_negotiation_messages
             )
             .order_by("-created_at")
         )
@@ -337,7 +337,7 @@ class ClientDashboardView(APIView):
         # Active negotiations
         active_negotiations = Negotiation.objects.filter(
             proposal__project__client=user,
-            is_closed=False
+          
         ).annotate(
             unread_message_count=Count(
                 'messages',
@@ -567,7 +567,7 @@ class ArtisanDashboardView(APIView):
         # -------------------------------------------------
         active_negotiations = Negotiation.objects.filter(
             proposal__artisan=user,
-            is_closed=False
+         
         ).annotate(
             unread_message_count=Count(
                 'messages',
@@ -800,16 +800,51 @@ class ArtisanMatchedProjectsView(generics.ListAPIView):
     serializer_class = ArtisanMatchedProjectSerializer
 
     def get_queryset(self):
-
         user = self.request.user
 
         if user.role != "artisan":
             return ArtisanMatch.objects.none()
 
+        # Negotiated final amount
+        negotiation_qs = Negotiation.objects.filter(
+            proposal__project=OuterRef("project__pk"),
+            proposal__artisan=user,
+            final_agreed_amount__isnull=False,
+        ).values("final_agreed_amount")[:1]
+
+        # Selected proposal price fallback
+        selected_proposal_qs = Proposal.objects.filter(
+            project=OuterRef("project__pk"),
+            artisan=user,
+            is_selected=True,
+        ).values("proposed_price")[:1]
+
         return (
             ArtisanMatch.objects
             .filter(artisan=user)
             .select_related("project", "project__client")
+            .annotate(
+                negotiated_cost=Subquery(
+                    negotiation_qs,
+                    output_field=DecimalField()
+                ),
+                selected_proposal_price=Subquery(
+                    selected_proposal_qs,
+                    output_field=DecimalField()
+                ),
+                agreed_cost=Case(
+                    When(
+                        negotiated_cost__isnull=False,
+                        then=F("negotiated_cost")
+                    ),
+                    When(
+                        selected_proposal_price__isnull=False,
+                        then=F("selected_proposal_price")
+                    ),
+                    default=Value(None),
+                    output_field=DecimalField()
+                )
+            )
             .order_by("-matched_at")
         )
 

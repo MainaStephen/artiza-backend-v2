@@ -242,7 +242,7 @@ class UserManagementView(APIView):
         bronze_count = 0
         silver_count = 0
         gold_count = 0
-        premium_count = 0
+      
 
         user_list = []
 
@@ -271,8 +271,7 @@ class UserManagementView(APIView):
                     silver_count += 1
                 elif tier == 'gold':
                     gold_count += 1
-                elif tier == 'premium':
-                    premium_count += 1
+               
 
             user_list.append({
                 "id": u.id,
@@ -292,7 +291,6 @@ class UserManagementView(APIView):
             "bronze_count": bronze_count,
             "silver_count": silver_count,
             "gold_count": gold_count,
-            "premium_count": premium_count,
             "users": user_list
         }
 
@@ -343,9 +341,9 @@ class UpdateArtisanTierView(APIView):
         artisan = get_object_or_404(User, id=user_id, role='artisan')
         tier = request.data.get('tier')
         
-        if tier not in ['bronze', 'silver', 'gold', 'premium']:
+        if tier not in ['bronze', 'silver', 'gold']:
             return Response(
-                {"error": "Invalid tier. Must be bronze, silver, gold, or premium"},
+                {"error": "Invalid tier. Must be bronze, silver or gold"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         

@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='ArtisanProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tier', models.CharField(choices=[('bronze', 'Bronze'), ('silver', 'Silver'), ('gold', 'Gold'), ('premium', 'Premium')], default='bronze', max_length=20)),
+                ('tier', models.CharField(choices=[('bronze', 'Bronze'), ('silver', 'Silver'), ('gold', 'Gold'), ], default='bronze', max_length=20)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='artisan_profile', to=settings.AUTH_USER_MODEL)),
             ],
         ),

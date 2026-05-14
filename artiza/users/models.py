@@ -99,12 +99,14 @@ class UserProfile(models.Model):
 #  Artisan Profile
 # ==============================
 class ArtisanProfile(models.Model):
+    # add bio as a character field to the artisan profile
+    # bio = models.CharField(max_length=500, blank=True, null=True)
 
     TIER_CHOICES = [
         ("bronze", "Bronze"),
         ("silver", "Silver"),
         ("gold", "Gold"),
-        ("premium", "Premium"),
+       
     ]
 
     user = models.OneToOneField(

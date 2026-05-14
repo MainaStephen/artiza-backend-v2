@@ -171,7 +171,6 @@ from artisanmatching.models import ArtisanMatch
 # =====================================================
 # ARTISAN MATCHED PROJECTS SERIALIZER
 # =====================================================
-
 class ArtisanMatchedProjectSerializer(serializers.ModelSerializer):
 
     project_title = serializers.CharField(
@@ -205,18 +204,23 @@ class ArtisanMatchedProjectSerializer(serializers.ModelSerializer):
         source="project.client.full_name",
         read_only=True
     )
-    
+
     images = ProjectImageSerializer(
-    source="project.images",
-    many=True,
-    read_only=True
+        source="project.images",
+        many=True,
+        read_only=True
     )
-    
+
     status = serializers.CharField(
         source="project.status",
         read_only=True
     )
-    
+
+    agreed_cost = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        read_only=True
+    )
 
     class Meta:
         model = ArtisanMatch
@@ -232,8 +236,8 @@ class ArtisanMatchedProjectSerializer(serializers.ModelSerializer):
             "status",
             "matched_at",
             "images",
+            "agreed_cost",
         ]
-
 
 # =====================================================
 # CLIENT VIEW MATCHED ARTISANS SERIALIZER
